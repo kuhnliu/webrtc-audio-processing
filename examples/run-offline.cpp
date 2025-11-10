@@ -17,7 +17,7 @@
 #include <webrtc/modules/audio_processing/include/audio_processing.h>
 
 #define DEFAULT_BLOCK_MS 10
-#define DEFAULT_RATE 32000
+#define DEFAULT_RATE 48000
 #define DEFAULT_CHANNELS 1
 
 int main(int argc, char **argv) {
