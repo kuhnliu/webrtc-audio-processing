@@ -21,7 +21,9 @@ libsystem_wrappers = static_library('system_wrappers',
     dependencies: common_deps,
     include_directories: webrtc_inc,
     c_args : common_cflags,
-    cpp_args : common_cxxflags
+    cpp_args : common_cxxflags,
+    gnu_symbol_visibility: 'inlineshidden',
+    build_by_default: false,
 )
 
 system_wrappers_dep = declare_dependency(

@@ -67,7 +67,9 @@ if have_x86
       dependencies: common_deps,
       include_directories: webrtc_inc,
       c_args: common_cflags + ['-msse2'],
-      cpp_args: common_cxxflags + ['-msse2']
+      cpp_args: common_cxxflags + ['-msse2'],
+      gnu_symbol_visibility: 'inlineshidden',
+      build_by_default: false,
     )
   ]
   arch_libs += [
@@ -79,7 +81,9 @@ if have_x86
       dependencies: common_deps,
       include_directories: webrtc_inc,
       c_args: common_cflags + avx_flags,
-      cpp_args: common_cxxflags + avx_flags
+      cpp_args: common_cxxflags + avx_flags,
+      gnu_symbol_visibility: 'inlineshidden',
+      build_by_default: false,
     )
   ]
 endif
@@ -135,7 +139,9 @@ libcommon_audio = static_library('common_audio',
     dependencies: common_deps,
     include_directories: webrtc_inc,
     c_args: common_cflags,
-    cpp_args: common_cxxflags
+    cpp_args: common_cxxflags,
+    gnu_symbol_visibility: 'inlineshidden',
+    build_by_default: false,
 )
 
 common_audio_dep = declare_dependency(

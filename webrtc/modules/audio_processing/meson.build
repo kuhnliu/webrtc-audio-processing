@@ -165,7 +165,9 @@ if have_x86
       dependencies: common_deps,
       include_directories: webrtc_inc,
       c_args: common_cflags + apm_flags + avx_flags,
-      cpp_args: common_cxxflags + apm_flags + avx_flags
+      cpp_args: common_cxxflags + apm_flags + avx_flags,
+      gnu_symbol_visibility: 'inlineshidden',
+      build_by_default: false,
     )
   ]
 endif
@@ -192,19 +194,22 @@ install_headers(webrtc_audio_processing_include_headers,
 
 libwebrtc_audio_processing = library(apm_project_name,
     webrtc_audio_processing_sources,
-    dependencies: [
-      base_dep,
-      api_dep,
-      system_wrappers_dep,
-      common_audio_dep,
-      isac_vad_dep,
-      pffft_dep,
-      rnnoise_dep,
-    ] + common_deps,
+    dependencies: common_deps + isac_vad_dep,
+    objects: [
+      libbase.extract_all_objects(recursive: true),
+      libapi.extract_all_objects(recursive: true),
+      libsystem_wrappers.extract_all_objects(recursive: true),
+      libcommon_audio.extract_all_objects(recursive: true),
+      libpffft.extract_all_objects(recursive: true),
+      librnnoise.extract_all_objects(recursive: true),
+    ],
     link_with: extra_libs,
     include_directories: webrtc_inc,
     c_args: common_cflags + apm_flags,
     cpp_args: common_cxxflags + apm_flags,
     soversion: apm_minor_version,
+    gnu_symbol_visibility: 'inlineshidden',
+    # FIXME: https://github.com/mesonbuild/meson/issues/15234
+    # prelink: true,
     install: true
 )

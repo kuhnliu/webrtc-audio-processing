@@ -68,7 +68,9 @@ libbase = static_library('libbase',
     base_sources,
     dependencies: common_deps + base_os_deps,
     include_directories: webrtc_inc,
-    cpp_args : common_cxxflags
+    cpp_args : common_cxxflags,
+    gnu_symbol_visibility: 'inlineshidden',
+    build_by_default: false,
 )
 
 base_dep = declare_dependency(

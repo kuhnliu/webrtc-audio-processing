@@ -174,13 +174,24 @@ if neon_opt.enabled()
   endif
 endif
 
+if cc.get_id() == 'msvc'
+  if get_option('default_library') == 'both'
+    error('This library is not compatible with default_library=both')
+  elif get_option('default_library') == 'shared'
+    platform_cflags += '-DWEBRTC_ENABLE_SYMBOL_EXPORT'
+  endif
+elif cc.has_function_attribute('visibility:default')
+  platform_cflags += '-DWEBRTC_ENABLE_SYMBOL_EXPORT'
+endif
+
+
 common_cflags = [
   '-DWEBRTC_LIBRARY_IMPL',
-  '-DWEBRTC_ENABLE_SYMBOL_EXPORT',
   # avoid windows.h/winsock2.h conflicts
   '-D_WINSOCKAPI_',
   '-DNDEBUG'
   ] + platform_cflags + os_cflags + arch_cflags
+
 common_cxxflags = common_cflags
 common_deps = os_deps + [absl_dep]
 webrtc_inc = include_directories('.')
@@ -201,9 +212,7 @@ pkgconfig.generate(
   description: 'WebRTC Audio Processing library',
   subdirs: include_subdir,
   requires: pc_requires,
-  extra_cflags: [
-    '-DWEBRTC_LIBRARY_IMPL',
-  ] + platform_cflags,
+  extra_cflags: platform_cflags,
 )
 
 audio_processing_dep = declare_dependency(

@@ -8,11 +8,13 @@ if (have_x86 and not have_inline_sse) or (have_arm and not neon_opt.enabled()) o
   pffft_cflags += [ '-DPFFFT_SIMD_DISABLE' ]
 endif
 
-libpffft = static_library('libpffft',
+libpffft = static_library('pffft',
     pffft_sources,
     dependencies: common_deps,
     include_directories: webrtc_inc,
-    c_args : common_cflags + pffft_cflags
+    c_args : common_cflags + pffft_cflags,
+    gnu_symbol_visibility: 'inlineshidden',
+    build_by_default: false,
 )
 
 pffft_dep = declare_dependency(
