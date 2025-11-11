@@ -41,7 +41,9 @@ libapi = static_library('libapi',
     api_sources,
     dependencies: common_deps,
     include_directories: webrtc_inc,
-    cpp_args : common_cxxflags
+    cpp_args : common_cxxflags,
+    gnu_symbol_visibility: 'inlineshidden',
+    build_by_default: false,
 )
 
 api_dep = declare_dependency(
