@@ -4,7 +4,7 @@ name: Sync upstream
 on:
   schedule:
     - cron: '0 0 * * *'  # 每天UTC时间0点
-  workflow_dispatch:  # 支持手动触发
+  workflow_dispatch:
 
 jobs:
   sync:
@@ -13,7 +13,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # 获取所有历史
+          fetch-depth: 0
+          token: ${{ secrets.PAT_TOKEN }}  # 使用PAT
 
       - name: Add upstream
         run: |
@@ -22,13 +23,13 @@ jobs:
 
       - name: Merge upstream
         run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
           git checkout master
           git merge upstream/master --no-edit
           
       - name: Push changes
         uses: ad-m/github-push-action@v0.8.0
         with:
-          github_token: ${{ secrets.PAT_TOKEN }}
+          github_token: ${{ secrets.PAT_TOKEN }}  # 使用PAT
           branch: master
